@@ -1,0 +1,2 @@
+cycle_counter.h:26:17:CycleCounter_GetValue	4	static
+cycle_counter.c:10:6:CycleCounter_Init	4	static

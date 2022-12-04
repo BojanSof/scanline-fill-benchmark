@@ -1,0 +1,16 @@
+lcd_ili9488.c:8:20:LCD_StartCom	8	static
+lcd_ili9488.c:14:20:LCD_StopCom	8	static
+lcd_ili9488.c:20:20:LCD_SetDataWrite	8	static
+lcd_ili9488.c:26:20:LCD_SetCmdWrite	8	static
+lcd_ili9488.c:61:6:LCD_Reset	8	static
+lcd_ili9488.c:71:6:LCD_WriteCmd	16	static
+lcd_ili9488.c:80:6:LCD_WriteData8	16	static
+lcd_ili9488.c:89:6:LCD_WriteDataColor	16	static
+lcd_ili9488.c:99:6:LCD_PrepareGRAMWrite	8	static
+lcd_ili9488.c:105:6:LCD_Init	16	static
+lcd_ili9488.c:193:6:LCD_SetCursor	32	static
+lcd_ili9488.c:198:6:LCD_SetArea	24	static
+lcd_ili9488.c:218:6:LCD_SetOrientation	24	static
+lcd_ili9488.c:252:6:LCD_Clear	48	static
+lcd_ili9488.c:271:6:LCD_DrawPoint	24	static
+lcd_ili9488.c:277:6:LCD_DrawArea	32	static

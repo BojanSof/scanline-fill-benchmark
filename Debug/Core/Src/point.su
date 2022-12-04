@@ -1,0 +1,5 @@
+point.c:22:12:PolarPointWithIndex_compare	24	static
+point.c:52:12:Point_CartesianToPolar	32	static
+point.c:60:7:Point_FindMassCenter	48	static
+point.c:77:6:Point_MoveOrigin	32	static
+point.c:86:6:Point_SortAntiClockwise	448	static
