@@ -7,6 +7,9 @@
 
 #include "scanline_fill.h"
 
+#include "usbd_cdc_if.h"
+#include <string.h>
+
 /**
  * @brief Find y-coordinate of next non-horizontal edge point
  * @param points Polygon points
@@ -40,7 +43,7 @@ void ScanlineFill_BuildEdgeTable(Edge *table, const size_t maxTableSize, Edge *e
 	// Iterate through every pair of points and create edges info
 	const Point *p1 = points + (numPoints - 1);  // First edge point
 	const Point *p2 = NULL;  // Second point
-	int32_t yPrev = p1->y;
+	int32_t yPrev = points[numPoints - 2].y;
 	size_t iEdge = 0;
 	for(size_t iPoint = 0; iPoint < numPoints; ++iPoint)
 	{
@@ -160,5 +163,5 @@ void ScanlineFill_FillEdgeData(Edge *table, const size_t maxTableSize, Edge *edg
 	edge->yu = (upper->y < yComp) ? upper->y - 1 : upper->y;  // adjust if edge is monotonically increasing or decreasing
 	edge->dx = ((float)(upper->x - lower->x)) / (upper->y - lower->y);
 	// Insert edge in edge table
-	ScanlineFill_InsertEdge(&table[lower->y], edge);
+	ScanlineFill_InsertEdge(table + lower->y, edge);
 }

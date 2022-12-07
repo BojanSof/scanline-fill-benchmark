@@ -1,7 +1,7 @@
-scanline_fill.c:38:6:ScanlineFill_BuildEdgeTable	64	static
-scanline_fill.c:66:6:ScanlineFill_BuildActiveEdgeList	32	static
-scanline_fill.c:78:6:ScanlineFill_UpdateActiveEdgeList	32	static
-scanline_fill.c:110:6:ScanlineFill_FillScanline	40	static
-scanline_fill.c:126:9:ScanlineFill_yNext	32	static
-scanline_fill.c:136:6:ScanlineFill_InsertEdge	24	static
-scanline_fill.c:156:6:ScanlineFill_FillEdgeData	24	static
+scanline_fill.c:41:6:ScanlineFill_BuildEdgeTable	64	static
+scanline_fill.c:69:6:ScanlineFill_BuildActiveEdgeList	32	static
+scanline_fill.c:81:6:ScanlineFill_UpdateActiveEdgeList	32	static
+scanline_fill.c:113:6:ScanlineFill_FillScanline	40	static
+scanline_fill.c:129:9:ScanlineFill_yNext	32	static
+scanline_fill.c:139:6:ScanlineFill_InsertEdge	24	static
+scanline_fill.c:159:6:ScanlineFill_FillEdgeData	24	static

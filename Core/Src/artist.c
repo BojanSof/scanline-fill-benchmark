@@ -29,17 +29,17 @@ void Artist_DrawText(Canvas *canvas, const char *txt, const Point pos, const col
 		// get character bytes from font array and write in data array
 		for(uint8_t x = 0; x < FONT_WIDTH; ++x)
 		{
-			currentPos.x = pos.x;
+			currentPos.y = pos.y;
 			uint8_t fontCol = font6x8[(*c - 32)*FONT_WIDTH + x];
 			for(uint8_t y = 0; y < FONT_HEIGHT; ++y)
 			{
 				if(fontCol & (1 << y))
 				{
-					canvas->data[currentPos.y + currentPos.x * canvas->numCols] = color;
+					canvas->data[currentPos.x + currentPos.y * canvas->numCols] = color;
 				}
-				currentPos.x += 1;
+				currentPos.y += 1;
 			}
-			currentPos.y += 1;
+			currentPos.x += 1;
 		}
 	}
 }

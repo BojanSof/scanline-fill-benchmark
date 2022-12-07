@@ -257,9 +257,9 @@ void LCD_Clear(Lcd *lcd, const color_t color)
 	LCD_StartCom();
 	LCD_SetDataWrite();
 
-	for(uint16_t x = 0; x < lcd->height; ++x)
+	for(uint16_t y = 0; y < lcd->height; ++y)
 	{
-		for(uint16_t y = 0; y < lcd->width; ++y)
+		for(uint16_t x = 0; x < lcd->width; ++x)
 		{
 			LCD_WriteDataColor(color);
 		}
@@ -279,11 +279,11 @@ void LCD_DrawArea(Lcd *lcd, const color_t *data, const size_t numRows, const siz
 	LCD_StartCom();
 	LCD_SetDataWrite();
 
-	for(uint16_t x = 0; x < numRows; ++x)
+	for(uint16_t y = 0; y < numRows; ++y)
 	{
-		for(uint16_t y = 0; y < numCols; ++y)
+		for(uint16_t x = 0; x < numCols; ++x)
 		{
-			LCD_WriteDataColor(data[y + x * numCols]);
+			LCD_WriteDataColor(data[x + y * numCols]);
 		}
 	}
 
