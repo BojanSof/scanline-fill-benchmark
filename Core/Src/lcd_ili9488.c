@@ -190,27 +190,27 @@ void LCD_Init(Lcd *lcd)
 	lcd->cursor.x = lcd->cursor.y = 0;
 }
 
-void LCD_SetCursor(Lcd *lcd, const Point p)
+void LCD_SetCursor(Lcd *lcd, const Point *p)
 {
 	LCD_SetArea(lcd, p, p);
 }
 
-void LCD_SetArea(Lcd *lcd, const Point startPoint, const Point endPoint)
+void LCD_SetArea(Lcd *lcd, const Point *startPoint, const Point *endPoint)
 {
 	LCD_WriteCmd(0x2A);
-	LCD_WriteData8(startPoint.x >> 8);
-	LCD_WriteData8(startPoint.x & 0x00FF);
-	LCD_WriteData8(endPoint.x >> 8);
-	LCD_WriteData8(endPoint.x & 0x00FF);
+	LCD_WriteData8(startPoint->x >> 8);
+	LCD_WriteData8(startPoint->x & 0x00FF);
+	LCD_WriteData8(endPoint->x >> 8);
+	LCD_WriteData8(endPoint->x & 0x00FF);
 
 	LCD_WriteCmd(0x2B);
-	LCD_WriteData8(startPoint.y >> 8);
-	LCD_WriteData8(startPoint.y & 0x00FF);
-	LCD_WriteData8(endPoint.y >> 8);
-	LCD_WriteData8(endPoint.y & 0x00FF);
+	LCD_WriteData8(startPoint->y >> 8);
+	LCD_WriteData8(startPoint->y & 0x00FF);
+	LCD_WriteData8(endPoint->y >> 8);
+	LCD_WriteData8(endPoint->y & 0x00FF);
 
-	lcd->cursor.x = startPoint.x;
-	lcd->cursor.y = startPoint.y;
+	lcd->cursor.x = startPoint->x;
+	lcd->cursor.y = startPoint->y;
 
 	LCD_PrepareGRAMWrite();
 }
@@ -252,7 +252,7 @@ void LCD_SetOrientation(Lcd *lcd, const uint8_t rotation)
 void LCD_Clear(Lcd *lcd, const color_t color)
 {
 	Point startPoint = {0, 0}, endPoint = {lcd->width - 1, lcd->height - 1};
-	LCD_SetArea(lcd, startPoint, endPoint);
+	LCD_SetArea(lcd, &startPoint, &endPoint);
 
 	LCD_StartCom();
 	LCD_SetDataWrite();
@@ -268,7 +268,7 @@ void LCD_Clear(Lcd *lcd, const color_t color)
 	LCD_StopCom();
 }
 
-void LCD_DrawPoint(Lcd *lcd, const Point p, const color_t color)
+void LCD_DrawPoint(Lcd *lcd, const Point *p, const color_t color)
 {
 	LCD_SetCursor(lcd, p);
 	LCD_WriteDataColor(color);

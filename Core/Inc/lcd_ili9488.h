@@ -44,7 +44,7 @@ void LCD_Init(Lcd *lcd);
  * @param lcd Pointer to Lcd struct
  * @param p The X and Y coordinates
  */
-void LCD_SetCursor(Lcd *lcd, const Point p);
+void LCD_SetCursor(Lcd *lcd, const Point *p);
 
 /**
  * @brief Set rectangular area of the display for drawing
@@ -52,7 +52,7 @@ void LCD_SetCursor(Lcd *lcd, const Point p);
  * @param startPoint Upper left corner point of the area
  * @param endPoint Bottom right corner point of the area
  */
-void LCD_SetArea(Lcd *lcd, const Point startPoint, const Point endPoint);
+void LCD_SetArea(Lcd *lcd, const Point *startPoint, const Point *endPoint);
 
 /**
  * @brief Rotate display (graphics ram -> physical pixels mapping)
@@ -73,7 +73,7 @@ void LCD_Clear(Lcd *lcd, const color_t color);
  * @param lcd Pointer to Lcd struct
  * @param p Coordinates of the point
  */
-void LCD_DrawPoint(Lcd *lcd, const Point p, const color_t color);
+void LCD_DrawPoint(Lcd *lcd, const Point *p, const color_t color);
 
 /**
  * @brief Draw in area of the display
