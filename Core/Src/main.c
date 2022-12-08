@@ -84,11 +84,24 @@ int main(void)
 		  .numRows = POLYGON_BUF_HEIGHT,
 		  .numCols = POLYGON_BUF_WIDTH
   };
+//  Point polygonPoints[] = {
+//		  {40, 60},
+//		  {50, 20},
+//		  {20, 90},
+//		  {1, 1}
+//  };
   Point polygonPoints[] = {
-		  {40, 60},
-		  {50, 20},
-		  {20, 90},
-		  {1, 1}
+		  {40, 40},
+		  {60, 60},
+		  {100, 40},
+		  {100, 80},
+		  {160, 80},
+		  {180, 120},
+		  {160, 160},
+		  {120, 180},
+		  {80, 120},
+		  {40, 160},
+		  {20, 100}
   };
   const size_t numPolygonPoints = sizeof(polygonPoints)/sizeof(polygonPoints[0]);
   /* USER CODE END 1 */
@@ -117,8 +130,8 @@ int main(void)
   LCD_Init(&lcd);
 
   // Draw header text
-  Point bufPos = {0, 0}, screenStartPos = {0, 0}, screenEndPos = {LCD_WIDTH - 1, FONT_HEIGHT - 1};
   strcpy(buf, "Scanline Fill Algorithm Benchmark");
+  Point bufPos = {0, 0}, screenStartPos = {0, 0}, screenEndPos = {LCD_WIDTH - 1, FONT_HEIGHT - 1};
   Artist_ClearCanvas(&textCanvas, BLACK);
   Artist_DrawText(&textCanvas, buf, bufPos, GREEN);
   LCD_SetArea(&lcd, &screenStartPos, &screenEndPos);
@@ -135,18 +148,28 @@ int main(void)
 	  uint32_t start_ticks = CycleCounter_GetValue();
 	  Artist_FillPolygon(&polygonCanvas, polygonPoints, numPolygonPoints, BLUE);
 	  uint32_t duration_ticks = CycleCounter_GetValue() - start_ticks;
-	  // uint32_t execution_time = (duration_ticks * 1000000UL) / SystemCoreClock;
+	  float execution_time = (float)(duration_ticks) / (SystemCoreClock/1000000);
 
-	  screenStartPos.x = 100; screenStartPos.y = 100;
+	  screenStartPos.x = 60; screenStartPos.y = 100;
 	  screenEndPos.x = screenStartPos.x + POLYGON_BUF_WIDTH - 1; screenEndPos.y = screenStartPos.y + POLYGON_BUF_HEIGHT - 1;
 	  LCD_SetArea(&lcd, &screenStartPos, &screenEndPos);
 	  LCD_DrawArea(&lcd, polygonCanvas.data, polygonCanvas.numRows, polygonCanvas.numCols);
+
 	  sprintf(buf, "Execution ticks: %lu", duration_ticks);
 	  bufPos.x = 0; bufPos.y = 0;
 	  screenStartPos.x = 0; screenStartPos.y = 3*LCD_HEIGHT/4;
 	  screenEndPos.x = screenStartPos.x + LCD_WIDTH - 1; screenEndPos.y = screenStartPos.y + FONT_HEIGHT - 1;
 	  Artist_ClearCanvas(&textCanvas, BLACK);
 	  Artist_DrawText(&textCanvas, buf, bufPos, RED);
+	  LCD_SetArea(&lcd, &screenStartPos, &screenEndPos);
+	  LCD_DrawArea(&lcd, textCanvas.data, textCanvas.numRows, textCanvas.numCols);
+
+	  sprintf(buf, "Execution time : %.3f us", execution_time);
+	  bufPos.x = 0; bufPos.y = 0;
+	  screenStartPos.x = 0; screenStartPos.y = 3*LCD_HEIGHT/4 + FONT_HEIGHT;
+	  screenEndPos.x = screenStartPos.x + LCD_WIDTH - 1; screenEndPos.y = screenStartPos.y + FONT_HEIGHT - 1;
+	  Artist_ClearCanvas(&textCanvas, BLACK);
+	  Artist_DrawText(&textCanvas, buf, bufPos, YELLOW);
 	  LCD_SetArea(&lcd, &screenStartPos, &screenEndPos);
 	  LCD_DrawArea(&lcd, textCanvas.data, textCanvas.numRows, textCanvas.numCols);
 	  HAL_Delay(500);

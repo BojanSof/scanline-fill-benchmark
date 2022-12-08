@@ -11,12 +11,12 @@
 /***** Point related *****/
 #define POINT_MAX_NUM 20
 
-/***** Scanline fill related *****/
-#define SCANLINE_FILL_TABLE_SIZE 		100
-#define SCANLINE_FILL_EDGES_MAX_NUM		20
-
 /***** Polygon buffer related *****/
-#define POLYGON_BUF_WIDTH	100
-#define POLYGON_BUF_HEIGHT	100
+#define POLYGON_BUF_WIDTH	200
+#define POLYGON_BUF_HEIGHT	200
+
+/***** Scanline fill related *****/
+#define SCANLINE_FILL_TABLE_SIZE 		POLYGON_BUF_HEIGHT
+#define SCANLINE_FILL_EDGES_MAX_NUM		20
 
 #endif /* INC_CONSTANTS_H_ */

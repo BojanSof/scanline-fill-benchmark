@@ -89,11 +89,11 @@ void LCD_WriteData8(uint8_t data)
 void LCD_WriteDataColor(const color_t color)
 {
 	// send red data
-	LCD_WriteData8((color >> 8) & 0xFC);
+	LCD_WriteData8(((color >> 8) & 0xF8) | 0x8);
 	// send green data
-	LCD_WriteData8((color >> 2) & 0xFC);
+	LCD_WriteData8((color >> 3) & 0xFC);
 	// send blue data
-	LCD_WriteData8((color << 2) & 0xFC);
+	LCD_WriteData8((color << 3) | 0x8);
 }
 
 void LCD_PrepareGRAMWrite(void)
