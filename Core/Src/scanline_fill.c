@@ -4,11 +4,9 @@
  *  Created on: 03.12.2022
  *      Author: Bojan Sofronievski
  */
+#include <string.h>
 
 #include "scanline_fill.h"
-
-#include "usbd_cdc_if.h"
-#include <string.h>
 
 /**
  * @brief Find y-coordinate of next non-horizontal edge point
