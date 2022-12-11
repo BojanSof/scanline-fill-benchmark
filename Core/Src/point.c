@@ -49,11 +49,85 @@ static int PolarPointWithIndex_compare(const void *a, const void *b)
 	}
 }
 
+/**
+ * @brief Polynomial approximation of atan
+ * @note Max error is 0.29 deg
+ * @param z Value to apply atan on
+ * @retval atan approximation, in radians
+ */
+static float Point_atan(const float z)
+{
+	static const float n1 = 0.97239411f;
+	static const float n2 = -0.19194795f;
+	return (n1 + n2 * z * z) * z;
+}
+
+/**
+ * @brief atan2 calculated using polynomial atan approximation
+ * @param y y-coordinate value
+ * @param x x-coordinate value
+ * @retval atan2 approximation, in radians
+ */
+static float Point_atan2(const float y, const float x)
+{
+	static const float PI = 3.14159265f;
+	static const float PI_2 = 1.57079633f;
+	if (x != 0.0f)
+	{
+		if (fabsf(x) > fabsf(y))
+		{
+			const float z = y / x;
+			if (x > 0.0)
+			{
+				// atan2(y,x) = atan(y/x) if x > 0
+				return Point_atan(z);
+			}
+			else if (y >= 0.0)
+			{
+				// atan2(y,x) = atan(y/x) + PI if x < 0, y >= 0
+				return Point_atan(z) + PI;
+			}
+			else
+			{
+				// atan2(y,x) = atan(y/x) - PI if x < 0, y < 0
+				return Point_atan(z) - PI;
+			}
+		}
+		else // Use property atan(y/x) = PI/2 - atan(x/y) if |y/x| > 1.
+		{
+			const float z = x / y;
+			if (y > 0.0)
+			{
+				// atan2(y,x) = PI/2 - atan(x/y) if |y/x| > 1, y > 0
+				return -Point_atan(z) + PI_2;
+			}
+			else
+			{
+				// atan2(y,x) = -PI/2 - atan(x/y) if |y/x| > 1, y < 0
+				return -Point_atan(z) - PI_2;
+			}
+		}
+	}
+	else
+	{
+		if (y > 0.0f) // x = 0, y > 0
+		{
+			return PI_2;
+		}
+		else if (y < 0.0f) // x = 0, y < 0
+		{
+			return -PI_2;
+		}
+	}
+	return 0.0f; // x, y = 0, 0
+}
+
 PointPolar Point_CartesianToPolar(const Point *point)
 {
 	PointPolar polar = {};
 	polar.radiusSquared = point->x * point->x + point->y * point->y;
-	polar.angle = atan2(point->y, point->x);
+	polar.angle = atan2f(point->y, point->x);
+	//polar.angle = Point_atan2(point->y, point->x);
 	return polar;
 }
 

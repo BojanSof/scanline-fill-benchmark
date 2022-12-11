@@ -10,6 +10,8 @@
 #include "scanline_fill.h"
 #include "constants.h"
 
+#include "cycle_counter.h"
+
 void Artist_ClearCanvas(Canvas *canvas, const color_t color)
 {
 	for(size_t iRow = 0; iRow < canvas->numRows; ++iRow)
@@ -44,10 +46,16 @@ void Artist_DrawText(Canvas *canvas, const char *txt, const Point pos, const col
 	}
 }
 
-void Artist_FillPolygon(Canvas *canvas, Point *points, const size_t numPoints, const color_t color)
+void Artist_FillPolygon(Canvas *canvas, Point *points, const size_t numPoints, const color_t color, uint32_t *benchmarkTimes)
 {
 	//1. Sort points anti-clockwise
+	uint32_t start_time = CycleCounter_GetValue();
+
 	Point_SortAntiClockwise(points, numPoints);
+
+	uint32_t end_time = CycleCounter_GetValue();
+	benchmarkTimes[BENCHMARK_SORT_POINTS] = end_time - start_time;
+
 	//2. Find ymin and ymax for the polygon
 	int32_t ymin = points[0].y, ymax = points[1].y;
 	for(const Point *p = points + 1; p != (points + numPoints); ++p)
@@ -60,8 +68,16 @@ void Artist_FillPolygon(Canvas *canvas, Point *points, const size_t numPoints, c
 	Edge edges[SCANLINE_FILL_EDGES_MAX_NUM] = {};
 	Edge active = {}; // head of list of active edges
 	//3. Build edge table
+	start_time = CycleCounter_GetValue();
+
 	ScanlineFill_BuildEdgeTable(table, SCANLINE_FILL_TABLE_SIZE, edges, SCANLINE_FILL_EDGES_MAX_NUM, points, numPoints);
+
+	end_time = CycleCounter_GetValue();
+	benchmarkTimes[BENCHMARK_BUILD_TABLE] = end_time - start_time;
+
 	//4. Iterate through each scanline, applying scanline fill
+	start_time = CycleCounter_GetValue();
+
 	for(int32_t yScanline = ymin; yScanline <= ymax; ++yScanline)
 	{
 		//4.1. Build list of active edges
@@ -74,6 +90,10 @@ void Artist_FillPolygon(Canvas *canvas, Point *points, const size_t numPoints, c
 			ScanlineFill_UpdateActiveEdgeList(&active, yScanline);
 		}
 	}
+
+	end_time = CycleCounter_GetValue();
+	benchmarkTimes[BENCHMARK_PROCESS_SCANLINES] = end_time - start_time;
+
 	//5. Color polygon points
 	for(const Point *p = points; p != (points + numPoints); ++p)
 	{

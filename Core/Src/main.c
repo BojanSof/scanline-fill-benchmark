@@ -84,12 +84,6 @@ int main(void)
 		  .numRows = POLYGON_BUF_HEIGHT,
 		  .numCols = POLYGON_BUF_WIDTH
   };
-//  Point polygonPoints[] = {
-//		  {40, 60},
-//		  {50, 20},
-//		  {20, 90},
-//		  {1, 1}
-//  };
   Point polygonPoints[] = {
 		  {40, 40},
 		  {60, 60},
@@ -104,6 +98,13 @@ int main(void)
 		  {20, 100}
   };
   const size_t numPolygonPoints = sizeof(polygonPoints)/sizeof(polygonPoints[0]);
+  uint32_t benchmarkTimes[BENCHMARK_NUM_TIMES] = {};
+  const char *benchmarkTimeStrings[BENCHMARK_NUM_TIMES] = {
+		  "Sorting polygon points:",
+		  "Building edge table:",
+		  "Processing scanlines:",
+		  ""
+  };
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -144,9 +145,11 @@ int main(void)
 	  HAL_GPIO_TogglePin(BOARD_LED_GPIO_Port, BOARD_LED_Pin);
 
 	  Artist_ClearCanvas(&polygonCanvas, BLACK);
+
 	  uint32_t start_ticks = CycleCounter_GetValue();
-	  Artist_FillPolygon(&polygonCanvas, polygonPoints, numPolygonPoints, BLUE);
+	  Artist_FillPolygon(&polygonCanvas, polygonPoints, numPolygonPoints, BLUE, benchmarkTimes);
 	  uint32_t duration_ticks = CycleCounter_GetValue() - start_ticks;
+	  benchmarkTimes[BENCHMARK_TOTAL_TIME] = duration_ticks;
 	  float execution_time = (float)(duration_ticks) / (SystemCoreClock/1000000);
 
 	  screenStartPos.x = 60; screenStartPos.y = 100;
@@ -154,7 +157,7 @@ int main(void)
 	  LCD_SetArea(&lcd, &screenStartPos, &screenEndPos);
 	  LCD_DrawArea(&lcd, polygonCanvas.data, polygonCanvas.numRows, polygonCanvas.numCols);
 
-	  sprintf(buf, "Execution ticks: %lu", duration_ticks);
+	  sprintf(buf, "Total execution ticks: %lu", duration_ticks);
 	  bufPos.x = 0; bufPos.y = 0;
 	  screenStartPos.x = 0; screenStartPos.y = 3*LCD_HEIGHT/4;
 	  screenEndPos.x = screenStartPos.x + LCD_WIDTH - 1; screenEndPos.y = screenStartPos.y + FONT_HEIGHT - 1;
@@ -163,7 +166,7 @@ int main(void)
 	  LCD_SetArea(&lcd, &screenStartPos, &screenEndPos);
 	  LCD_DrawArea(&lcd, textCanvas.data, textCanvas.numRows, textCanvas.numCols);
 
-	  sprintf(buf, "Execution time : %.3f us", execution_time);
+	  sprintf(buf, "Total execution time : %.3f us", execution_time);
 	  bufPos.x = 0; bufPos.y = 0;
 	  screenStartPos.x = 0; screenStartPos.y = 3*LCD_HEIGHT/4 + FONT_HEIGHT;
 	  screenEndPos.x = screenStartPos.x + LCD_WIDTH - 1; screenEndPos.y = screenStartPos.y + FONT_HEIGHT - 1;
@@ -171,7 +174,20 @@ int main(void)
 	  Artist_DrawText(&textCanvas, buf, bufPos, YELLOW);
 	  LCD_SetArea(&lcd, &screenStartPos, &screenEndPos);
 	  LCD_DrawArea(&lcd, textCanvas.data, textCanvas.numRows, textCanvas.numCols);
-	  HAL_Delay(500);
+
+	  for(uint8_t iTime = 0; iTime < BENCHMARK_NUM_TIMES - 1; ++iTime)
+	  {
+		  sprintf(buf, "%s %lu ticks", benchmarkTimeStrings[iTime], benchmarkTimes[iTime]);
+		  bufPos.x = 0; bufPos.y = 0;
+		  screenStartPos.x = 0; screenStartPos.y = 3*LCD_HEIGHT/4 + (iTime + 2)*FONT_HEIGHT;
+		  screenEndPos.x = screenStartPos.x + LCD_WIDTH - 1; screenEndPos.y = screenStartPos.y + FONT_HEIGHT - 1;
+		  Artist_ClearCanvas(&textCanvas, BLACK);
+		  Artist_DrawText(&textCanvas, buf, bufPos, MAGENTA);
+		  LCD_SetArea(&lcd, &screenStartPos, &screenEndPos);
+		  LCD_DrawArea(&lcd, textCanvas.data, textCanvas.numRows, textCanvas.numCols);
+	  }
+
+	  HAL_Delay(1000);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

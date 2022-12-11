@@ -46,6 +46,6 @@ void Artist_DrawText(Canvas *canvas, const char *txt, const Point pos, const col
  * @param numPoints Number of points
  * @param color Color used for filling
  */
-void Artist_FillPolygon(Canvas *canvas, Point *points, const size_t numPoints, const color_t color);
+void Artist_FillPolygon(Canvas *canvas, Point *points, const size_t numPoints, const color_t color, uint32_t *benchmark_times);
 
 #endif /* INC_ARTIST_H_ */
