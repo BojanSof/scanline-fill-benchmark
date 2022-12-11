@@ -1,0 +1,5 @@
+scanline_fill.c:142:6:ScanlineFill_InsertEdge	8	static
+scanline_fill.c:39:6:ScanlineFill_BuildEdgeTable	56	static
+scanline_fill.c:67:6:ScanlineFill_BuildActiveEdgeList	16	static
+scanline_fill.c:79:6:ScanlineFill_UpdateActiveEdgeList	24	static
+scanline_fill.c:116:6:ScanlineFill_FillScanline	8	static

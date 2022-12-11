@@ -1,0 +1,3 @@
+artist.c:15:6:Artist_ClearCanvas	20	static
+artist.c:26:6:Artist_DrawText	40	static
+artist.c:49:6:Artist_FillPolygon	6248	static
