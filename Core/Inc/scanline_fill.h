@@ -19,9 +19,12 @@
  */
 typedef struct Edge
 {
-	float xl;			// x-coordinate of lower point
+	int32_t xl;			// x-coordinate of lower point
 	int32_t yu;			// y-coordinate of upper point
-	float dx;			// inverse of slope, used to adjust x-coordinates
+	int32_t dx;			// used as part of inverse of slope, to adjust x-coordinates
+	int32_t dy;			// used as part of inverse of slope, to adjust x-coordinates
+	int32_t dxCounter;  // used to adjust x-coordinates
+	int32_t xInc;  		// used to adjust x-coordinates, -1 when slope < 0, +1 when slope > 0
 	struct Edge *next;	// pointer to connected edge
 } Edge;
 

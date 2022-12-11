@@ -91,7 +91,12 @@ void ScanlineFill_UpdateActiveEdgeList(Edge *active, int32_t yScanline)
 		else
 		{
 			// update edges in-progress
-			currentEdge->xl = currentEdge->xl + currentEdge->dx;
+			currentEdge->dxCounter += currentEdge->dx;
+			while(currentEdge->dxCounter >= currentEdge->dy)
+			{
+				currentEdge->xl += currentEdge->xInc;
+				currentEdge->dxCounter -= currentEdge->dy;
+			}
 			edgeBefore = currentEdge;
 			currentEdge = currentEdge->next;
 		}
@@ -159,7 +164,18 @@ void ScanlineFill_FillEdgeData(Edge *table, const size_t maxTableSize, Edge *edg
 	// Fill edge info
 	edge->xl = lower->x;
 	edge->yu = (upper->y < yComp) ? upper->y - 1 : upper->y;  // adjust if edge is monotonically increasing or decreasing
-	edge->dx = ((float)(upper->x - lower->x)) / (upper->y - lower->y);
+	edge->dx = (upper->x - lower->x);
+	edge->dy = (upper->y - lower->y);
+	if(edge->dx < 0)
+	{
+		edge->dx = -edge->dx;
+		edge->xInc = -1;
+	}
+	else
+	{
+		edge->xInc = 1;
+	}
+	edge->dxCounter = 0;
 	// Insert edge in edge table
 	ScanlineFill_InsertEdge(table + lower->y, edge);
 }
